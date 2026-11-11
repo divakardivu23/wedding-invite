@@ -1,0 +1,465 @@
+<!-- ... existing code ... -->
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Divakar weds Chaitra - Wedding Invitation Version 4</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Great+Vibes&family=Playfair+Display:ital,wght@0,500;0,700;1,400&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        maroonTheme: '#5a1e2b',
+                        pinkBg: '#fcf2f4',
+                    },
+                    fontFamily: {
+                        cinzel: ['Cinzel', 'serif'],
+                        script: ['Great Vibes', 'cursive'],
+                        garamond: ['Cormorant Garamond', 'serif'],
+                        playfair: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            background-color: #f7e6eb;
+            color: #5a1e2b;
+            font-family: 'Cormorant Garamond', serif;
+            overflow-x: hidden;
+        }
+
+        /* Falling Petals Animation */
+        .petal-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 9999;
+        }
+
+        .petal {
+            position: absolute;
+            top: -10vh;
+            user-select: none;
+            pointer-events: none;
+            animation: fall linear infinite;
+            opacity: 0.35;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-10vh) translateX(0) rotate(0deg);
+                opacity: 0.35;
+            }
+            50% {
+                opacity: 0.25;
+            }
+            100% {
+                transform: translateY(110vh) translateX(50px) rotate(360deg);
+                opacity: 0.1;
+            }
+        }
+
+        /* Rotating animations for Om rings */
+        @keyframes spinSlow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes spinMedium {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(-360deg); }
+        }
+
+        @keyframes spinFast {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .animate-spin-slow {
+            animation: spinSlow 35s linear infinite;
+        }
+
+        .animate-spin-medium {
+            animation: spinMedium 15s linear infinite;
+        }
+
+        .animate-spin-fast {
+            animation: spinFast 6s linear infinite;
+        }
+
+        .maroon-gradient {
+            background: linear-gradient(135deg, #7a2839 0%, #5a1e2b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .devanagari-om {
+            font-family: 'Poppins', 'Tiro Devanagari Sanskrit', 'Kokila', 'Arial', sans-serif;
+            font-weight: 700;
+        }
+
+        /* Fade-in scroll effect classes */
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+            will-change: opacity, transform;
+        }
+
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f7e6eb;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #7a2839;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-start selection:bg-[#5a1e2b] selection:text-[#fff] py-4 px-2">
+
+    <!-- Hidden Audio Element in DOM for maximum reliability -->
+    <audio id="wedding-audio" loop preload="auto" crossorigin="anonymous">
+        <!-- Highly reliable archive.org link for traditional Sitar music -->
+        <source src="https://archive.org/download/RagaBhairavi-Sitar/RagaBhairavi-sitar.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Opening Cover Screen ("Open Om") -->
+    <div id="welcome-overlay" class="fixed inset-0 z-50 bg-[#f7e6eb] flex flex-col items-center justify-center p-4 transition-opacity duration-700">
+        <div class="w-full max-w-md bg-gradient-to-b from-[#fff5f7] via-[#faebef] to-[#f5dfe4] border-[2px] border-[#8c3b4f]/40 p-8 shadow-2xl rounded-2xl text-center flex flex-col items-center space-y-6">
+            <p class="font-['Cinzel'] text-xs tracking-[0.25em] uppercase text-[#7a2839] font-bold">Wedding Invitation</p>
+            
+            <div class="relative w-28 h-28 flex items-center justify-center cursor-pointer group" id="open-btn">
+                <div class="absolute inset-0 rounded-full border border-dashed border-[#7a2839]/60 animate-spin-slow"></div>
+                <div class="absolute inset-2 rounded-full border border-dotted border-[#7a2839]/50 animate-spin-medium"></div>
+                <div class="absolute inset-4 rounded-full border border-[#7a2839]/40 animate-spin-fast"></div>
+                <span class="text-5xl maroon-gradient devanagari-om z-10 group-hover:scale-110 transition-transform" title="Om">ॐ</span>
+            </div>
+
+            <div class="space-y-1">
+                <h1 class="font-script text-4xl text-[#7a2839]">Divakar &amp; Chaitra</h1>
+                <p class="font-garamond italic text-sm text-[#5a1e2b] font-bold">Tap Om to Open Invitation</p>
+                <p class="font-garamond italic text-xs text-[#7a2839] mt-2 px-2 border border-[#7a2839]/20 bg-[#fff5f7] rounded p-2">
+                    <i class="fa-solid fa-bell pr-1"></i> Note: Please ensure your phone's <b>Silent Switch is OFF</b> and volume is up to hear the music.
+                </p>
+            </div>
+
+            <button id="open-btn-text" class="px-8 py-3 rounded-full bg-gradient-to-r from-[#7a2839] to-[#5a1e2b] text-[#fff] font-['Cinzel'] text-xs tracking-[0.2em] font-bold shadow-lg hover:opacity-95 transition-all">
+                OPEN INVITATION
+            </button>
+        </div>
+    </div>
+
+    <!-- Falling Petals Container -->
+    <div class="petal-container" id="petals-container"></div>
+
+    <!-- Container Wrap with Soft Pink & Maroon Aesthetic -->
+    <div class="w-full max-w-md mx-auto bg-gradient-to-b from-[#fff5f7] via-[#faebef] to-[#f5dfe4] border-[2px] border-[#8c3b4f]/40 p-6 sm:p-8 shadow-2xl relative rounded-2xl overflow-hidden">
+        
+        <!-- Inner Content -->
+        <div class="relative z-10 flex flex-col items-center text-center space-y-5">
+
+            <!-- Top Om Symbol inside Triple Rings -->
+            <div class="space-y-2 pt-2 flex flex-col items-center fade-in-section">
+                <div class="relative w-20 h-20 flex items-center justify-center">
+                    <!-- Outer Large Ring (Slow rotation) -->
+                    <div class="absolute inset-0 rounded-full border border-dashed border-[#7a2839]/60 animate-spin-slow"></div>
+                    <!-- Middle Ring (Medium rotation counter-clockwise) -->
+                    <div class="absolute inset-2 rounded-full border border-dotted border-[#7a2839]/50 animate-spin-medium"></div>
+                    <!-- Inner Small Ring (Fast rotation) -->
+                    <div class="absolute inset-4 rounded-full border border-[#7a2839]/40 animate-spin-fast"></div>
+                    <!-- Om Symbol with Hindi Devanagari look -->
+                    <span class="text-3xl maroon-gradient devanagari-om z-10" title="Om">ॐ</span>
+                </div>
+                
+                <!-- Ornamental Divider -->
+                <div class="flex items-center justify-center space-x-2 text-[#7a2839] pt-2">
+                    <div class="w-8 h-[1px] bg-[#7a2839]/40"></div>
+                    <span class="text-xs">❦ 🪷 ❦</span>
+                    <div class="w-8 h-[1px] bg-[#7a2839]/40"></div>
+                </div>
+            </div>
+
+            <!-- Invitation Quote -->
+            <div class="py-1 fade-in-section">
+                <p class="font-garamond italic text-[#5a1e2b] text-lg sm:text-xl leading-relaxed max-w-sm mx-auto font-medium">
+                    "with the divine blessings and heart full of love, we are getting married."
+                </p>
+            </div>
+
+            <!-- Bride & Groom Names -->
+            <div class="space-y-1 py-1 fade-in-section">
+                <h1 class="font-script text-5xl sm:text-6xl text-[#7a2839] tracking-wide drop-shadow-sm font-normal">Divakar C</h1>
+
+                <div class="flex items-center justify-center py-0.5">
+                    <span class="text-[#7a2839] text-2xl font-script">&amp;</span>
+                </div>
+                
+                <h1 class="font-script text-5xl sm:text-6xl text-[#7a2839] tracking-wide drop-shadow-sm font-normal">Chaitra S</h1>
+                <!-- Ornamental underline after Chaitra's name -->
+                <div class="flex items-center justify-center space-x-2 text-[#7a2839] pt-1">
+                    <div class="w-12 h-[1px] bg-gradient-to-r from-transparent to-[#7a2839]/60"></div>
+                    <span class="text-[10px]">🪷</span>
+                    <div class="w-12 h-[1px] bg-gradient-to-l from-transparent to-[#7a2839]/60"></div>
+                </div>
+            </div>
+
+            <!-- Invitation Subtext -->
+            <div class="py-1 fade-in-section">
+                <p class="font-garamond italic text-[#6a2434] text-base max-w-xs mx-auto">
+                    Join us on our special day and shower us with your love and blessings
+                </p>
+                <!-- Ornamental underline after blessings -->
+                <div class="flex items-center justify-center space-x-2 text-[#7a2839] pt-2">
+                    <div class="w-12 h-[1px] bg-gradient-to-r from-transparent to-[#7a2839]/60"></div>
+                    <span class="text-[10px]">🪷</span>
+                    <div class="w-12 h-[1px] bg-gradient-to-l from-transparent to-[#7a2839]/60"></div>
+                </div>
+            </div>
+
+            <!-- Muhurtham Header & Date Container with balanced spacing -->
+            <div class="pt-1 space-y-1 fade-in-section">
+                <p class="font-['Cinzel'] text-lg sm:text-xl uppercase tracking-[0.2em] text-[#7a2839] font-bold">
+                    MUHURTHAM
+                </p>
+                <div class="space-y-0.5">
+                    <p class="font-['Cinzel'] text-xs tracking-[0.15em] font-bold text-[#5a1e2b]">
+                        Friday, November 27
+                    </p>
+                    <p class="font-['Cinzel'] text-xs tracking-[0.15em] font-bold text-[#5a1e2b]">
+                        9:00 AM
+                    </p>
+                </div>
+                <p class="font-garamond italic text-sm text-[#7a2839] font-semibold -mb-2">
+                    at
+                </p>
+            </div>
+
+            <!-- Venue Details -->
+            <div class="space-y-0.5 -mt-5 fade-in-section">
+                <h3 class="font-playfair font-bold text-lg text-[#7a2839]">Sri Nimishamba Devi Temple</h3>
+                <p class="font-garamond text-base text-[#5a1e2b] font-medium">
+                    RR Nagar, Bengaluru 97
+                </p>
+            </div>
+
+            <!-- Google Map Button Section -->
+            <div class="pt-1 pb-1 flex flex-col items-center fade-in-section">
+                <a href="https://maps.google.com/?q=Sri+Nimishamba+Devi+Temple+RR+Nagar+Bengaluru" target="_blank" class="inline-flex items-center space-x-2 py-2.5 px-6 rounded-full bg-gradient-to-r from-[#7a2839] to-[#5a1e2b] text-[#fff] font-['Cinzel'] text-xs tracking-[0.2em] font-bold shadow-md hover:opacity-95 transition-all">
+                    <i class="fa-solid fa-map-location-dot"></i>
+                    <span>MAP: TEMPLE</span>
+                </a>
+            </div>
+
+            <!-- Live Countdown Timer -->
+            <div class="w-full bg-[#f2d8df]/80 border border-[#7a2839]/30 rounded-xl p-3 my-2 shadow-inner fade-in-section">
+                <p class="font-['Cinzel'] text-xs tracking-[0.2em] text-[#5a1e2b] font-bold mb-2 uppercase">Countdown to Muhurtham</p>
+                <div id="countdown" class="grid grid-cols-4 gap-2 text-center">
+                    <div class="bg-[#fcf2f4] border border-[#7a2839]/30 rounded-lg p-1.5 shadow-sm">
+                        <span id="days" class="block font-['Cinzel'] font-bold text-base sm:text-lg text-[#7a2839]">00</span>
+                        <span class="text-[9px] uppercase tracking-wider text-[#7a2839]/70">Days</span>
+                    </div>
+                    <div class="bg-[#fcf2f4] border border-[#7a2839]/30 rounded-lg p-1.5 shadow-sm">
+                        <span id="hours" class="block font-['Cinzel'] font-bold text-base sm:text-lg text-[#7a2839]">00</span>
+                        <span class="text-[9px] uppercase tracking-wider text-[#7a2839]/70">Hours</span>
+                    </div>
+                    <div class="bg-[#fcf2f4] border border-[#7a2839]/30 rounded-lg p-1.5 shadow-sm">
+                        <span id="minutes" class="block font-['Cinzel'] font-bold text-base sm:text-lg text-[#7a2839]">00</span>
+                        <span class="text-[9px] uppercase tracking-wider text-[#7a2839]/70">Mins</span>
+                    </div>
+                    <div class="bg-[#fcf2f4] border border-[#7a2839]/30 rounded-lg p-1.5 shadow-sm">
+                        <span id="seconds" class="block font-['Cinzel'] font-bold text-base sm:text-lg text-[#7a2839]">00</span>
+                        <span class="text-[9px] uppercase tracking-wider text-[#7a2839]/70">Secs</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ornamental Divider -->
+            <div class="flex items-center justify-center space-x-3 text-[#7a2839] py-2 w-full fade-in-section">
+                <div class="w-12 h-[1px] bg-[#7a2839]/40"></div>
+                <span class="text-xs">❦ 🪷 ❦</span>
+                <div class="w-12 h-[1px] bg-[#7a2839]/40"></div>
+            </div>
+
+            <!-- Reception & Beegara Oota Section -->
+            <div class="space-y-1.5 fade-in-section">
+                <p class="font-['Cinzel'] text-base sm:text-lg uppercase tracking-[0.15em] text-[#7a2839] font-bold leading-tight">
+                    RECEPTION &amp; BEEGARAS<br>OOTA
+                </p>
+                <div>
+                    <p class="font-['Cinzel'] text-xs sm:text-sm tracking-[0.1em] font-bold text-[#5a1e2b] whitespace-nowrap">
+                        Sunday, December 13 &nbsp;|&nbsp; 11:30 AM
+                    </p>
+                </div>
+            </div>
+
+            <!-- Reception Venue Details -->
+            <div class="space-y-1 fade-in-section">
+                <h3 class="font-playfair font-bold text-lg text-[#7a2839] whitespace-nowrap">Kalpavruksha Party Hall &amp; Residency</h3>
+                <p class="font-garamond text-base text-[#5a1e2b] font-medium">
+                    Kabbalu, Karnataka 562126
+                </p>
+                <p class="font-garamond italic text-sm text-[#7a2839]">
+                    (Near Sri Kabbalamma Temple)
+                </p>
+            </div>
+
+            <!-- Reception Google Map Button -->
+            <div class="pt-1 pb-1 flex flex-col items-center fade-in-section">
+                <a href="https://maps.google.com/?q=Kalpavruksha+Party+Hall+Kabbalu" target="_blank" class="inline-flex items-center space-x-2 py-2.5 px-6 rounded-full bg-gradient-to-r from-[#7a2839] to-[#5a1e2b] text-[#fff] font-['Cinzel'] text-xs tracking-[0.2em] font-bold shadow-md hover:opacity-95 transition-all">
+                    <i class="fa-solid fa-map-location-dot"></i>
+                    <span>MAP: RECEPTION</span>
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Open Screen & Auto Play Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const overlay = document.getElementById('welcome-overlay');
+            const openBtn = document.getElementById('open-btn');
+            const openBtnText = document.getElementById('open-btn-text');
+            const bgMusic = document.getElementById('wedding-audio');
+            
+            let hasOpened = false;
+
+            // Pre-warm the audio connection when the user's finger hovers or first touches the button
+            const preWarmAudio = () => {
+                if (bgMusic.readyState === 0) {
+                    bgMusic.load();
+                }
+            };
+            openBtn.addEventListener('mouseenter', preWarmAudio, { once: true });
+            openBtn.addEventListener('touchstart', preWarmAudio, { once: true, passive: true });
+            openBtnText.addEventListener('touchstart', preWarmAudio, { once: true, passive: true });
+
+            function openInvitation(e) {
+                if (hasOpened) return;
+                
+                // Prevent default touch behaviors that might delay the click
+                if (e && e.cancelable) e.preventDefault();
+
+                hasOpened = true;
+
+                // Direct, unmuted play command. Mobile browsers require this to be synchronous with the tap.
+                bgMusic.play().then(() => {
+                    console.log("Audio successfully playing");
+                }).catch(err => {
+                    console.log("Audio temporarily blocked, waiting for next tap:", err);
+                    // Extreme fallback: Try again on next interaction anywhere on screen
+                    document.body.addEventListener('click', () => { bgMusic.play(); }, {once:true});
+                    document.body.addEventListener('touchstart', () => { bgMusic.play(); }, {once:true, passive:true});
+                });
+                
+                // Fade out overlay
+                overlay.style.opacity = '0';
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                }, 700);
+            }
+
+            // Bind to both click and touchend for maximum mobile responsiveness
+            openBtn.addEventListener('click', openInvitation);
+            openBtnText.addEventListener('click', openInvitation);
+            openBtn.addEventListener('touchend', openInvitation);
+            openBtnText.addEventListener('touchend', openInvitation);
+        });
+
+        // Intersection Observer for smooth fade-in on scroll
+        document.addEventListener("DOMContentLoaded", function() {
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.15
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.fade-in-section').forEach(section => {
+                observer.observe(section);
+            });
+        });
+
+        // Falling petals generator (fewer petals, slower fall)
+        window.addEventListener('load', function() {
+            const container = document.getElementById('petals-container');
+            const numberOfPetals = 8;
+
+            for (let i = 0; i < numberOfPetals; i++) {
+                const petal = document.createElement('div');
+                petal.className = 'petal';
+                petal.innerText = '🌸';
+                
+                petal.style.left = Math.random() * 100 + 'vw';
+                petal.style.animationDuration = (Math.random() * 8 + 10) + 's'; 
+                petal.style.animationDelay = (Math.random() * 6) + 's';
+                petal.style.fontSize = (Math.random() * 10 + 16) + 'px';
+                
+                container.appendChild(petal);
+            }
+        });
+
+        const weddingDate = new Date("November 27, 2026 09:00:00").getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = weddingDate - now;
+
+            if (distance < 0) {
+                document.getElementById("countdown").innerHTML = "<div class='col-span-4 text-xs font-['Cinzel'] font-bold text-[#7a2839] py-2'>The Wedding Day Has Arrived!</div>";
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("days").innerText = String(days).padStart(2, '0');
+            document.getElementById("hours").innerText = String(hours).padStart(2, '0');
+            document.getElementById("minutes").innerText = String(minutes).padStart(2, '0');
+            document.getElementById("seconds").innerText = String(seconds).padStart(2, '0');
+        }
+
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+    </script>
+
+    <div class="mt-4 text-center text-xs font-garamond italic text-[#7a2839]">
+        <p>&copy; 2026 Divakar weds Chaitra. All Rights Reserved.</p>
+    </div>
+
+</body>
+</html>
