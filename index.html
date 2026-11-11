@@ -1,10 +1,9 @@
-<!-- ... existing code ... -->
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Divakar weds Chaitra - Wedding Invitation Version 4</title>
+    <title>Divakar weds Chaitra - Wedding Invitation</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts -->
@@ -142,10 +141,9 @@
 </head>
 <body class="min-h-screen flex flex-col items-center justify-start selection:bg-[#5a1e2b] selection:text-[#fff] py-4 px-2">
 
-    <!-- Hidden Audio Element in DOM for maximum reliability -->
-    <audio id="wedding-audio" loop preload="auto" crossorigin="anonymous">
-        <!-- Highly reliable archive.org link for traditional Sitar music -->
-        <source src="https://archive.org/download/RagaBhairavi-Sitar/RagaBhairavi-sitar.mp3" type="audio/mpeg">
+    <!-- Local Audio Element -> Looks exactly for wedding-music.mp3 in your GitHub folder -->
+    <audio id="wedding-audio" loop preload="auto">
+        <source src="wedding-music.mp3" type="audio/mpeg">
     </audio>
 
     <!-- Opening Cover Screen ("Open Om") -->
@@ -153,7 +151,7 @@
         <div class="w-full max-w-md bg-gradient-to-b from-[#fff5f7] via-[#faebef] to-[#f5dfe4] border-[2px] border-[#8c3b4f]/40 p-8 shadow-2xl rounded-2xl text-center flex flex-col items-center space-y-6">
             <p class="font-['Cinzel'] text-xs tracking-[0.25em] uppercase text-[#7a2839] font-bold">Wedding Invitation</p>
             
-            <div class="relative w-28 h-28 flex items-center justify-center cursor-pointer group" id="open-btn">
+            <div class="relative w-28 h-28 flex items-center justify-center cursor-pointer group">
                 <div class="absolute inset-0 rounded-full border border-dashed border-[#7a2839]/60 animate-spin-slow"></div>
                 <div class="absolute inset-2 rounded-full border border-dotted border-[#7a2839]/50 animate-spin-medium"></div>
                 <div class="absolute inset-4 rounded-full border border-[#7a2839]/40 animate-spin-fast"></div>
@@ -162,9 +160,9 @@
 
             <div class="space-y-1">
                 <h1 class="font-script text-4xl text-[#7a2839]">Divakar &amp; Chaitra</h1>
-                <p class="font-garamond italic text-sm text-[#5a1e2b] font-bold">Tap Om to Open Invitation</p>
+                <p class="font-garamond italic text-sm text-[#5a1e2b] font-bold">Tap below to open</p>
                 <p class="font-garamond italic text-xs text-[#7a2839] mt-2 px-2 border border-[#7a2839]/20 bg-[#fff5f7] rounded p-2">
-                    <i class="fa-solid fa-bell pr-1"></i> Note: Please ensure your phone's <b>Silent Switch is OFF</b> and volume is up to hear the music.
+                    <i class="fa-solid fa-bell pr-1"></i> Ensure your phone is not on silent.
                 </p>
             </div>
 
@@ -186,13 +184,9 @@
             <!-- Top Om Symbol inside Triple Rings -->
             <div class="space-y-2 pt-2 flex flex-col items-center fade-in-section">
                 <div class="relative w-20 h-20 flex items-center justify-center">
-                    <!-- Outer Large Ring (Slow rotation) -->
                     <div class="absolute inset-0 rounded-full border border-dashed border-[#7a2839]/60 animate-spin-slow"></div>
-                    <!-- Middle Ring (Medium rotation counter-clockwise) -->
                     <div class="absolute inset-2 rounded-full border border-dotted border-[#7a2839]/50 animate-spin-medium"></div>
-                    <!-- Inner Small Ring (Fast rotation) -->
                     <div class="absolute inset-4 rounded-full border border-[#7a2839]/40 animate-spin-fast"></div>
-                    <!-- Om Symbol with Hindi Devanagari look -->
                     <span class="text-3xl maroon-gradient devanagari-om z-10" title="Om">ॐ</span>
                 </div>
                 
@@ -308,7 +302,7 @@
             <!-- Reception & Beegara Oota Section -->
             <div class="space-y-1.5 fade-in-section">
                 <p class="font-['Cinzel'] text-base sm:text-lg uppercase tracking-[0.15em] text-[#7a2839] font-bold leading-tight">
-                    RECEPTION &amp; BEEGARAS<br>OOTA
+                    RECEPTION &amp; BEEGARA<br>OOTA
                 </p>
                 <div>
                     <p class="font-['Cinzel'] text-xs sm:text-sm tracking-[0.1em] font-bold text-[#5a1e2b] whitespace-nowrap">
@@ -343,52 +337,27 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const overlay = document.getElementById('welcome-overlay');
-            const openBtn = document.getElementById('open-btn');
             const openBtnText = document.getElementById('open-btn-text');
             const bgMusic = document.getElementById('wedding-audio');
-            
-            let hasOpened = false;
-
-            // Pre-warm the audio connection when the user's finger hovers or first touches the button
-            const preWarmAudio = () => {
-                if (bgMusic.readyState === 0) {
-                    bgMusic.load();
-                }
-            };
-            openBtn.addEventListener('mouseenter', preWarmAudio, { once: true });
-            openBtn.addEventListener('touchstart', preWarmAudio, { once: true, passive: true });
-            openBtnText.addEventListener('touchstart', preWarmAudio, { once: true, passive: true });
 
             function openInvitation(e) {
-                if (hasOpened) return;
+                if (e.cancelable) e.preventDefault();
                 
-                // Prevent default touch behaviors that might delay the click
-                if (e && e.cancelable) e.preventDefault();
-
-                hasOpened = true;
-
-                // Direct, unmuted play command. Mobile browsers require this to be synchronous with the tap.
-                bgMusic.play().then(() => {
-                    console.log("Audio successfully playing");
-                }).catch(err => {
-                    console.log("Audio temporarily blocked, waiting for next tap:", err);
-                    // Extreme fallback: Try again on next interaction anywhere on screen
-                    document.body.addEventListener('click', () => { bgMusic.play(); }, {once:true});
-                    document.body.addEventListener('touchstart', () => { bgMusic.play(); }, {once:true, passive:true});
+                // Plays the wedding-music.mp3 immediately!
+                bgMusic.play().catch(function(e) {
+                    console.log("Audio play failed. Ensure volume is up.", e);
                 });
                 
-                // Fade out overlay
                 overlay.style.opacity = '0';
                 setTimeout(() => {
                     overlay.style.display = 'none';
                 }, 700);
+
+                // Remove listener so it only triggers once
+                openBtnText.removeEventListener('click', openInvitation);
             }
 
-            // Bind to both click and touchend for maximum mobile responsiveness
-            openBtn.addEventListener('click', openInvitation);
             openBtnText.addEventListener('click', openInvitation);
-            openBtn.addEventListener('touchend', openInvitation);
-            openBtnText.addEventListener('touchend', openInvitation);
         });
 
         // Intersection Observer for smooth fade-in on scroll
@@ -412,7 +381,7 @@
             });
         });
 
-        // Falling petals generator (fewer petals, slower fall)
+        // Falling petals generator
         window.addEventListener('load', function() {
             const container = document.getElementById('petals-container');
             const numberOfPetals = 8;
