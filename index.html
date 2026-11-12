@@ -109,20 +109,70 @@
             -webkit-text-fill-color: transparent;
         }
 
-        .devanagari-om {
-            font-family: 'Poppins', 'Tiro Devanagari Sanskrit', 'Kokila', 'Arial', sans-serif;
+        /* Classic traditional Devanagari styling */
+        .classic-om {
+            font-family: 'Sanskrit Text', 'Tiro Devanagari Sanskrit', 'Mangal', 'Kokila', serif;
             font-weight: 700;
         }
 
-        /* Fade-in scroll effect classes */
+        /* Subtle, Re-triggerable Scroll Effect Classes */
         .fade-in-section {
             opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+            transform: translateY(15px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
             will-change: opacity, transform;
         }
 
         .fade-in-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Opening Overlay & Dedicated Butter-Smooth Om Zoom Animation */
+        #welcome-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f7e6eb;
+            overflow: hidden;
+            transition: opacity 1.8s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        #welcome-card {
+            transition: opacity 1.2s ease-out, transform 1.8s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        /* Ultra-smooth, gradual zoom and spin for the Om wheel */
+        #open-trigger {
+            transition: transform 1.8s cubic-bezier(0.25, 1, 0.5, 1);
+            will-change: transform;
+        }
+
+        #welcome-overlay.opening #open-trigger {
+            transform: scale(7) rotate(540deg);
+        }
+
+        #welcome-overlay.opening #welcome-card {
+            opacity: 0;
+            transform: scale(1.05);
+        }
+
+        #welcome-overlay.opening {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Main Invitation Butter-Smooth Fade & Slide-Up */
+        #main-invite-container {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1.8s cubic-bezier(0.25, 1, 0.5, 1) 0.3s, transform 1.8s cubic-bezier(0.25, 1, 0.5, 1) 0.3s;
+        }
+
+        #main-invite-container.visible {
             opacity: 1;
             transform: translateY(0);
         }
@@ -141,32 +191,33 @@
 </head>
 <body class="min-h-screen flex flex-col items-center justify-start selection:bg-[#5a1e2b] selection:text-[#fff] py-4 px-2">
 
-    <!-- Local Audio Element -> Looks exactly for wedding-music.mp3 in your GitHub folder -->
+    <!-- Local Audio Element -->
     <audio id="wedding-audio" loop preload="auto">
         <source src="wedding-music.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- Opening Cover Screen ("Open Om") -->
-    <div id="welcome-overlay" class="fixed inset-0 z-50 bg-[#f7e6eb] flex flex-col items-center justify-center p-4 transition-opacity duration-700">
-        <div class="w-full max-w-md bg-gradient-to-b from-[#fff5f7] via-[#faebef] to-[#f5dfe4] border-[2px] border-[#8c3b4f]/40 p-8 shadow-2xl rounded-2xl text-center flex flex-col items-center space-y-6">
+    <!-- Opening Cover Screen with Om Wheel Zoom-and-Spin Animation -->
+    <div id="welcome-overlay">
+        <div id="welcome-card" class="w-full max-w-md mx-4 bg-gradient-to-b from-[#fff5f7] via-[#faebef] to-[#f5dfe4] border-[2px] border-[#8c3b4f]/40 p-8 shadow-2xl rounded-2xl text-center flex flex-col items-center space-y-6 relative overflow-hidden">
+            
             <p class="font-['Cinzel'] text-xs tracking-[0.25em] uppercase text-[#7a2839] font-bold">Wedding Invitation</p>
             
-            <div class="relative w-28 h-28 flex items-center justify-center cursor-pointer group">
-                <div class="absolute inset-0 rounded-full border border-dashed border-[#7a2839]/60 animate-spin-slow"></div>
-                <div class="absolute inset-2 rounded-full border border-dotted border-[#7a2839]/50 animate-spin-medium"></div>
-                <div class="absolute inset-4 rounded-full border border-[#7a2839]/40 animate-spin-fast"></div>
-                <span class="text-5xl maroon-gradient devanagari-om z-10 group-hover:scale-110 transition-transform" title="Om">ॐ</span>
+            <div id="open-trigger" class="relative w-36 h-36 flex items-center justify-center cursor-pointer group">
+                <div class="absolute inset-0 rounded-full border-[2px] border-dashed border-[#7a2839]/60 animate-spin-slow"></div>
+                <div class="absolute inset-2 rounded-full border-[2px] border-dotted border-[#7a2839]/50 animate-spin-medium"></div>
+                <div class="absolute inset-4 rounded-full border-[2px] border-[#7a2839]/40 animate-spin-fast"></div>
+                <span class="text-6xl maroon-gradient classic-om z-10 group-hover:scale-110 transition-transform" title="Om">ॐ</span>
             </div>
 
             <div class="space-y-1">
                 <h1 class="font-script text-4xl text-[#7a2839]">Divakar &amp; Chaitra</h1>
                 <p class="font-garamond italic text-sm text-[#5a1e2b] font-bold">Tap below to open</p>
-                <p class="font-garamond italic text-xs text-[#7a2839] mt-2 px-2 border border-[#7a2839]/20 bg-[#fff5f7] rounded p-2">
-                    <i class="fa-solid fa-bell pr-1"></i> Ensure your phone is not on silent.
+                <p class="font-garamond italic text-xs text-[#7a2839] mt-2">
+                    Ensure your phone is not on silent.
                 </p>
             </div>
 
-            <button id="open-btn-text" class="px-8 py-3 rounded-full bg-gradient-to-r from-[#7a2839] to-[#5a1e2b] text-[#fff] font-['Cinzel'] text-xs tracking-[0.2em] font-bold shadow-lg hover:opacity-95 transition-all">
+            <button id="open-btn-text" class="px-8 py-3 rounded-full bg-gradient-to-r from-[#7a2839] to-[#5a1e2b] text-[#fff] font-['Cinzel'] text-xs tracking-[0.2em] font-bold shadow-lg hover:opacity-95 transition-all cursor-pointer">
                 OPEN INVITATION
             </button>
         </div>
@@ -176,22 +227,32 @@
     <div class="petal-container" id="petals-container"></div>
 
     <!-- Container Wrap with Soft Pink & Maroon Aesthetic -->
-    <div class="w-full max-w-md mx-auto bg-gradient-to-b from-[#fff5f7] via-[#faebef] to-[#f5dfe4] border-[2px] border-[#8c3b4f]/40 p-6 sm:p-8 shadow-2xl relative rounded-2xl overflow-hidden">
+    <div id="main-invite-container" class="w-full max-w-md mx-auto bg-gradient-to-b from-[#fff5f7] via-[#faebef] to-[#f5dfe4] border-[2px] border-[#8c3b4f]/40 p-6 sm:p-8 shadow-2xl relative rounded-2xl overflow-hidden">
         
         <!-- Inner Content -->
         <div class="relative z-10 flex flex-col items-center text-center space-y-5">
 
-            <!-- Top Om Symbol inside Triple Rings -->
+            <!-- Larger 3-Ring Setup for Inner Screen -->
             <div class="space-y-2 pt-2 flex flex-col items-center fade-in-section">
-                <div class="relative w-20 h-20 flex items-center justify-center">
-                    <div class="absolute inset-0 rounded-full border border-dashed border-[#7a2839]/60 animate-spin-slow"></div>
-                    <div class="absolute inset-2 rounded-full border border-dotted border-[#7a2839]/50 animate-spin-medium"></div>
-                    <div class="absolute inset-4 rounded-full border border-[#7a2839]/40 animate-spin-fast"></div>
-                    <span class="text-3xl maroon-gradient devanagari-om z-10" title="Om">ॐ</span>
+                <div class="relative w-32 h-32 flex items-center justify-center">
+                    <div class="absolute inset-0 rounded-full border-[2px] border-dashed border-[#7a2839]/60 animate-spin-slow"></div>
+                    <div class="absolute inset-2 rounded-full border-[2px] border-dotted border-[#7a2839]/50 animate-spin-medium"></div>
+                    <div class="absolute inset-4 rounded-full border-[2px] border-[#7a2839]/40 animate-spin-fast"></div>
+                    <span class="text-5xl maroon-gradient classic-om z-10" title="Om">ॐ</span>
                 </div>
                 
+                <!-- Sanskrit Vedic Blessing Verse -->
+                <div class="pt-2 px-2 max-w-xs mx-auto text-center">
+                    <p class="font-garamond text-xs italic text-[#7a2839] font-bold tracking-wide">
+                        "Om Saha Navavatu, Saha Nau Bhunaktu, Saha Viryam Karavavahai."
+                    </p>
+                    <p class="font-garamond text-[11px] italic text-[#5a1e2b]/90 mt-0.5">
+                        (May the Divine protect us both, nourish us both, and empower us together in love and harmony.)
+                    </p>
+                </div>
+
                 <!-- Ornamental Divider -->
-                <div class="flex items-center justify-center space-x-2 text-[#7a2839] pt-2">
+                <div class="flex items-center justify-center space-x-2 text-[#7a2839] pt-1">
                     <div class="w-8 h-[1px] bg-[#7a2839]/40"></div>
                     <span class="text-xs">❦ 🪷 ❦</span>
                     <div class="w-8 h-[1px] bg-[#7a2839]/40"></div>
@@ -261,7 +322,7 @@
                 </p>
             </div>
 
-            <!-- Google Map Button Section -->
+    <!-- Google Map Button Section -->
             <div class="pt-1 pb-1 flex flex-col items-center fade-in-section">
                 <a href="https://maps.google.com/?q=Sri+Nimishamba+Devi+Temple+RR+Nagar+Bengaluru" target="_blank" class="inline-flex items-center space-x-2 py-2.5 px-6 rounded-full bg-gradient-to-r from-[#7a2839] to-[#5a1e2b] text-[#fff] font-['Cinzel'] text-xs tracking-[0.2em] font-bold shadow-md hover:opacity-95 transition-all">
                     <i class="fa-solid fa-map-location-dot"></i>
@@ -333,45 +394,53 @@
         </div>
     </div>
 
-    <!-- Open Screen & Auto Play Script -->
+    <!-- Opening & Transition Script -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const overlay = document.getElementById('welcome-overlay');
             const openBtnText = document.getElementById('open-btn-text');
+            const openTrigger = document.getElementById('open-trigger');
+            const mainContainer = document.getElementById('main-invite-container');
             const bgMusic = document.getElementById('wedding-audio');
 
             function openInvitation(e) {
-                if (e.cancelable) e.preventDefault();
-                
-                // Plays the wedding-music.mp3 immediately!
-                bgMusic.play().catch(function(e) {
-                    console.log("Audio play failed. Ensure volume is up.", e);
+                if (e) e.preventDefault();
+                bgMusic.play().catch(function(err) {
+                    console.log("Audio play failed.", err);
                 });
                 
-                overlay.style.opacity = '0';
+                // Trigger smooth Om wheel zoom-and-spin opening animation & overlay fade
+                overlay.classList.add('opening');
+                
+                // Gently fade in and slide up the main invitation card with silky smoothness
+                mainContainer.classList.add('visible');
+
+                // Cleanly remove overlay after transition completes
                 setTimeout(() => {
                     overlay.style.display = 'none';
-                }, 700);
-
-                // Remove listener so it only triggers once
-                openBtnText.removeEventListener('click', openInvitation);
+                }, 1800);
             }
 
             openBtnText.addEventListener('click', openInvitation);
+            openTrigger.addEventListener('click', openInvitation);
+            openBtnText.addEventListener('touchend', openInvitation);
+            openTrigger.addEventListener('touchend', openInvitation);
         });
 
-        // Intersection Observer for smooth fade-in on scroll
+        // Intersection Observer for re-triggerable fade-in on scroll
         document.addEventListener("DOMContentLoaded", function() {
             const observerOptions = {
                 root: null,
                 rootMargin: '0px',
-                threshold: 0.15
+                threshold: 0.1
             };
 
             const observer = new IntersectionObserver((entries, observer) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('is-visible');
+                    } else {
+                        entry.target.classList.remove('is-visible');
                     }
                 });
             }, observerOptions);
